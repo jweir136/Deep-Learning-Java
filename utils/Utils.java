@@ -70,4 +70,80 @@ public class Utils {
 
     return encodedArray;
   }
+
+  /** One-hot-encode a 1D matrix of ints. Automatically
+   *    creates encoding rules.
+   *  @param matrix
+   *    A 1D int matrix to one-hot-encode.
+   *  @return A new 2D array containing an encoded version
+   *    of the matrix argument.
+   *  @precondition The length of matrix must be greater
+   *    than 0. matrix must contain ints starting with 0,
+   *    and working up from 0 for each unique value in
+   *    matrix.
+  */
+  public static int[][] autoEncodeTargets(int[] matrix) {
+    int[] encodeRule = new int[unique(matrix).length];
+    int[][] encodedArray = new int[matrix.length][unique(matrix).length];
+    int counter = 0;
+
+    for (int value : matrix) {
+      encodeRule[value] = 1;
+      encodedArray[counter++] = encodeRule;
+      encodeRule = new int[unique(matrix).length];
+    }
+
+    return encodedArray;
+  }
+
+  /** Takes the features and adds a bias term to each
+   *    instance. Simulates a bias node.
+   *  @param features
+   *    A 2D array of features to add the bias term to.
+   *  @return Return a new 2D array containing the inputed
+   *    features and a new bias term attached to each
+   *    instance.
+   *  @precondition The length of features must be greater
+   *    than 0, and the length of the second dimension must
+   *    be greater than 0. 
+  */
+  public static double[][] addBias(double[][] features) {
+    double[][] newFeatures = new double[features.length][features[0].length];
+    double[] feat = new double[features[0].length + 1];
+
+    for (int i = 0; i < features.length; i++) {
+      feat[0] = 1.0;
+      for (int j = 0; j < features[0].length; j++) {
+        feat[i+1] = Math.random();
+      }
+      newFeatures[i] = feat;
+    }
+
+    return newFeatures;
+  }
+
+  /** Create a m*n 2D matrix containing randomly inited
+   *    weights between 0 and 1. 
+   *  @param nLayer2Nodes
+   *    The number of nodes in the second layer. Decided
+   *      the size of the first dimension.
+   *  @param nLayer1Nodes
+   *    The number of nodes in the first layer. Decided the
+   *      size of the second dimension.
+   *  @return Return a 2D array of random numbers to be
+   *    used as weights in a neural network.
+   *  @precondition The size of both arguments must be
+   *    greater than 0.
+  */
+  public static double[][] initWeights(int nLayer2Nodes, int nLayer1Nodes) {
+    double[][] weights = new double[nLayer2Nodes][nLayer1Nodes];
+
+    for (int i = 0; i < nLayer2Nodes; i++) {
+      for (int j = 0; j < nLayer1Nodes; j++) {
+        weights[i][j] = Math.random();
+      }
+    }
+
+    return weights;
+  }
 }
